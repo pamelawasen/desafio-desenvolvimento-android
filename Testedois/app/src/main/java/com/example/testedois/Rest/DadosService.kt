@@ -20,17 +20,19 @@ object DadosService {
 
     @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
     fun getDados(context: Context): List<DadosLista> {
-        var dados = ArrayList<DadosLista>()
+        var dados = DadosLista()
         if (AndroidUtils.isInternetDisponivel(context)) {
             val url = "$host/unisabor?querycard=16150001503&pin=N6E4F7KIC6&qcapi"
             val json = HttpHelper.get(url)
             dados = parserJson(json)
 
-            for (d in dados) {
+            /*for (d in dados) {
                 saveOffline(d)
-            }
-
-            return dados
+            }*/
+            saveOffline(dados)
+            val retorno = ArrayList<DadosLista>()
+            retorno.add(dados)
+            return retorno
         } else {
             val dao = DatabaseManager.getDadosDAO()
             val dados = dao.findAll()
@@ -38,7 +40,7 @@ object DadosService {
         }
     }
 
-    fun save(dados: DadosLista): Response {
+    fun save(dados: DadosLista): DadosLista {
         var json = HttpHelper.post("$host/unisabor?querycard=16150001503&pin=N6E4F7KIC6&qcapi", dados.toJson())
         return parserJson(json)
     }
@@ -60,22 +62,21 @@ object DadosService {
     }
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-    fun delete(dados: DadosLista): Response {
+   /* fun delete(dados: DadosLista): Response {
         if (AndroidUtils.isInternetDisponivel(DadoApplication.getInstance().applicationContext)) {
             val url = "$host/unisabor?querycard=16150001503&pin=N6E4F7KIC6&qcapi/${dados.codCartao}"
             val json = HttpHelper.delete(url)
 
-            return parserJson(json)
+            return parserJson(json)*
         } else {
             val dao = DatabaseManager.getDadosDAO()
             dao.delete(dados)
             return Response(status = "OK", msg = "Dados salvos ")
         }
 
-    }
+    }*/
 
-    inline fun <reified T> parserJson(json: String): T {
-        val type = object : TypeToken<T>() {}.type
-        return Gson().fromJson<T>(json, type)
+    inline fun  parserJson(json: String): DadosLista {
+        return Gson().fromJson(json, DadosLista::class.java)
     }
 }

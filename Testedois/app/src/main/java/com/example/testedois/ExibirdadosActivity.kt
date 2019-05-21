@@ -1,5 +1,6 @@
 package com.example.testedois
 
+import android.annotation.TargetApi
 import android.content.Context
 import android.content.Intent
 import android.os.Build
@@ -19,6 +20,7 @@ class ExibirdadosActivity : AppCompatActivity() {
     private var dados = listOf<DadosLista>()
     var recyclerpedidos: RecyclerView? = null
 
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_exibirdados)
@@ -27,12 +29,11 @@ class ExibirdadosActivity : AppCompatActivity() {
         recyclerpedidos?.layoutManager = LinearLayoutManager(context)
         recyclerpedidos?.itemAnimator = DefaultItemAnimator()
         recyclerpedidos?.setHasFixedSize(true)
-    }
-    @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
-    override fun onResume() {
-        super.onResume()
+
         taskDados()
     }
+
+
     @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
     fun taskDados() {
 
@@ -46,9 +47,7 @@ class ExibirdadosActivity : AppCompatActivity() {
 
     }
     fun onClickdados(dado:DadosLista){
-        Toast.makeText(context, "Clicou no Pedido ${dado.nomeEmpresa}", Toast.LENGTH_SHORT).show()
-        val intent = Intent(context, ExibirdadosActivity::class.java)
-        intent.putExtra("Pedido", dado)
-        startActivity(intent)
+        Toast.makeText(context, " ${dado.nomeEmpresa}", Toast.LENGTH_SHORT).show()
+
     }
 }

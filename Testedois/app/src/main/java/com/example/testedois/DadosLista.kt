@@ -1,6 +1,7 @@
 package com.example.testedois
 
 import android.arch.persistence.room.Entity
+import android.arch.persistence.room.Ignore
 import android.arch.persistence.room.PrimaryKey
 import com.google.gson.GsonBuilder
 import java.io.Serializable
@@ -18,7 +19,8 @@ class DadosLista :Serializable{
             var dtUltimoUpdate = ""
             var nome = ""
             var CodEmpresa = ""
-            var movimentos = ""
+            @Ignore
+            var movimentos = arrayOf<String>()
 
             override fun toString(): String {
                 return "DadosList $nomeEmpresa"
